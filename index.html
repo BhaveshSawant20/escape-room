@@ -13,7 +13,7 @@ body {
     font-family: 'Nosifer', cursive;
 
     background-color: #000;
-    background-image: url("background.jpeg"); /* Make sure file name matches exactly */
+    background-image: url("background.jpeg");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -41,11 +41,9 @@ input {
     padding: 12px;
     font-size: 18px;
     margin-top: 20px;
-
     background-color: black;
     color: red;
     border: 1px solid red;
-
     font-family: 'Nosifer', cursive;
     text-align: center;
 }
@@ -144,6 +142,10 @@ function saveAndNext() {
         return;
     }
 
+    // Instant transition (no delay)
+    nextScreen(2);
+
+    // Background save (non-blocking)
     fetch("https://script.google.com/macros/s/AKfycbylPBcvGLYyPCkhuizypxXefOmrANjgMjBS2P8KjGDI0coLZRQLP3TN88I9Dhu2bnmG/exec", {
         method: "POST",
         headers: {
@@ -153,19 +155,12 @@ function saveAndNext() {
             teamname: team
         })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
-        console.log("Server Response:", data);
-
-        if (data.status === "success") {
-            nextScreen(2);
-        } else {
-            alert("Script error: " + data.message);
-        }
+        console.log("Saved:", data);
     })
     .catch(error => {
-        console.error("Fetch Error:", error);
-        alert("Network error. Check console.");
+        console.error("Background save failed:", error);
     });
 }
 </script>
