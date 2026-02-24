@@ -13,7 +13,7 @@ body {
     font-family: 'Nosifer', cursive;
 
     background-color: #000;
-    background-image: url("background.jpg");
+    background-image: url("background.jpeg"); /* Make sure file name matches exactly */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -24,9 +24,8 @@ body {
     overflow: hidden;
 }
 
-/* Dark overlay */
 .overlay {
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.85);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -34,12 +33,10 @@ body {
     align-items: center;
 }
 
-/* Glow effect */
 h1, h2 {
     text-shadow: 0 0 15px red;
 }
 
-/* Input styling */
 input {
     padding: 12px;
     font-size: 18px;
@@ -53,13 +50,11 @@ input {
     text-align: center;
 }
 
-/* Placeholder font */
 input::placeholder {
     font-family: 'Nosifer', cursive;
     color: #ff4d4d;
 }
 
-/* Button styling */
 button {
     margin-top: 20px;
     padding: 10px 25px;
@@ -129,7 +124,7 @@ const music = document.getElementById("bgmusic");
 function startMusic() {
     music.volume = 0.5;
     music.play().catch(() => {
-        console.log("Autoplay blocked, waiting for interaction.");
+        console.log("Autoplay blocked until interaction.");
     });
 }
 
@@ -144,27 +139,36 @@ function nextScreen(screenNumber) {
 function saveAndNext() {
     var team = document.getElementById("teamname").value;
 
-    if(team.trim() === "") {
+    if (team.trim() === "") {
         alert("Enter Team Name First");
         return;
     }
 
     fetch("https://script.google.com/macros/s/AKfycbylPBcvGLYyPCkhuizypxXefOmrANjgMjBS2P8KjGDI0coLZRQLP3TN88I9Dhu2bnmG/exec", {
         method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
         body: JSON.stringify({
             teamname: team
         })
     })
-    .then(() => {
-        nextScreen(2);
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server Response:", data);
+
+        if (data.status === "success") {
+            nextScreen(2);
+        } else {
+            alert("Script error: " + data.message);
+        }
     })
-    .catch(() => {
-        alert("Error saving data");
+    .catch(error => {
+        console.error("Fetch Error:", error);
+        alert("Network error. Check console.");
     });
 }
 </script>
 
 </body>
-
 </html>
-
