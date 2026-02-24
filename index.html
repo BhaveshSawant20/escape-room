@@ -2,133 +2,94 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Attendance Form</title>
+  <title>Escape Room Access</title>
 
   <style>
     body {
       margin: 0;
       padding: 0;
       font-family: Arial, sans-serif;
+      text-align: center;
 
-      /* Background Image */
+      /* Background image */
       background: url("background.png") no-repeat center center fixed;
       background-size: cover;
-
-      /* REMOVE DARKNESS */
-      background-color: #ffffff;
     }
 
     .container {
-      width: 400px;
-      margin: 80px auto;
-      padding: 30px;
+      margin-top: 80px;
+      padding: 20px;
+    }
 
-      /* Light transparent card */
-      background: rgba(255, 255, 255, 0.9);
+    /* TEXT WITH BLACK BORDER */
+    .outline-text {
+      color: white;
+      -webkit-text-stroke: 1.5px black;
+      text-stroke: 1.5px black;
+      text-shadow:
+        -1px -1px 0 black,
+         1px -1px 0 black,
+        -1px  1px 0 black,
+         1px  1px 0 black;
+    }
 
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      text-align: center;
+    h1 {
+      font-size: 48px;
+      margin: 40px 0;
     }
 
     h2 {
-      margin-bottom: 20px;
-      color: #000;
+      font-size: 28px;
+      margin: 20px 0;
     }
 
-    input, select {
-      width: 100%;
-      padding: 10px;
+    h3 {
+      font-size: 24px;
+      margin-top: 40px;
+    }
+
+    p {
+      font-size: 18px;
       margin: 10px 0;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-      font-size: 14px;
     }
 
-    button {
-      width: 100%;
-      padding: 12px;
-      background: #007bff;
-      color: white;
+    .button {
+      margin-top: 40px;
+      padding: 15px 40px;
+      font-size: 18px;
       border: none;
-      border-radius: 5px;
-      font-size: 16px;
+      background-color: #00cc66;
+      color: white;
       cursor: pointer;
+      border-radius: 5px;
     }
 
-    button:hover {
-      background: #0056b3;
-    }
-
-    .hidden {
-      display: none;
+    .button:hover {
+      background-color: #00994d;
     }
   </style>
 </head>
 
 <body>
 
-<div class="container">
+  <div class="container">
 
-  <!-- Page 1 -->
-  <div id="page1">
-    <h2>Student Details</h2>
+    <h2 class="outline-text">The Upside Down doesn’t welcome guests.</h2>
+    <h2 class="outline-text">“It keeps them.”</h2>
 
-    <input type="text" id="name" placeholder="Enter Name">
-    <input type="text" id="roll" placeholder="Enter Roll Number">
+    <h3 class="outline-text">Rules of Escape Room</h3>
 
-    <button onclick="nextPage()">Next</button>
+    <p class="outline-text">No phones.</p>
+    <p class="outline-text">Solve within time.</p>
+    <p class="outline-text">What you see… sees you back.</p>
+
+    <h2 class="outline-text">“…Are you sure you want to be trapped where the walls breathe?”</h2>
+
+    <h1 class="outline-text">ACCESS GRANTED</h1>
+
+    <button class="button">Enter</button>
+
   </div>
-
-  <!-- Page 2 -->
-  <div id="page2" class="hidden">
-    <h2>Confirm Attendance</h2>
-
-    <select id="status">
-      <option value="Present">Present</option>
-      <option value="Absent">Absent</option>
-    </select>
-
-    <button onclick="submitData()">Submit</button>
-  </div>
-
-</div>
-
-<script>
-  function nextPage() {
-    document.getElementById("page1").classList.add("hidden");
-    document.getElementById("page2").classList.remove("hidden");
-  }
-
-  function submitData() {
-    const name = document.getElementById("name").value;
-    const roll = document.getElementById("roll").value;
-    const status = document.getElementById("status").value;
-
-    if (!name || !roll) {
-      alert("Fill all details");
-      return;
-    }
-
-    fetch("YOUR_WEB_APP_URL_HERE", {
-      method: "POST",
-      body: JSON.stringify({
-        name: name,
-        roll: roll,
-        status: status
-      })
-    })
-    .then(res => res.text())
-    .then(data => {
-      alert("Attendance Saved Successfully");
-      location.reload();
-    })
-    .catch(err => {
-      alert("Error saving data");
-      console.error(err);
-    });
-  }
-</script>
 
 </body>
 </html>
