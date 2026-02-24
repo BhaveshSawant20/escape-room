@@ -1,95 +1,175 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Escape Room Access</title>
+<meta charset="UTF-8">
+<title>Escape Room</title>
 
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, sans-serif;
-      text-align: center;
+<link href="https://fonts.googleapis.com/css2?family=Nosifer&display=swap" rel="stylesheet">
 
-      /* Background image */
-      background: url("background.png") no-repeat center center fixed;
-      background-size: cover;
-    }
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Nosifer', cursive;
 
-    .container {
-      margin-top: 80px;
-      padding: 20px;
-    }
+    background-image: url("background.jpeg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 
-    /* TEXT WITH BLACK BORDER */
-    .outline-text {
-      color: white;
-      -webkit-text-stroke: 1.5px black;
-      text-stroke: 1.5px black;
-      text-shadow:
+    color: #ff1a1a;
+    text-align: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ✅ TEXT BORDER ADDED */
+.outline-text {
+    -webkit-text-stroke: 1.5px black;
+    text-shadow:
         -1px -1px 0 black,
-         1px -1px 0 black,
-        -1px  1px 0 black,
-         1px  1px 0 black;
-    }
+        1px -1px 0 black,
+        -1px 1px 0 black,
+        1px 1px 0 black;
+}
 
-    h1 {
-      font-size: 48px;
-      margin: 40px 0;
-    }
+.overlay {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-    h2 {
-      font-size: 28px;
-      margin: 20px 0;
-    }
+h1, h2 {
+    text-shadow: 0 0 15px red;
+}
 
-    h3 {
-      font-size: 24px;
-      margin-top: 40px;
-    }
+input {
+    padding: 12px;
+    font-size: 18px;
+    margin-top: 20px;
+    background-color: black;
+    color: red;
+    border: 1px solid red;
+    font-family: 'Nosifer', cursive;
+    text-align: center;
+}
 
-    p {
-      font-size: 18px;
-      margin: 10px 0;
-    }
+input::placeholder {
+    font-family: 'Nosifer', cursive;
+    color: #ff4d4d;
+}
 
-    .button {
-      margin-top: 40px;
-      padding: 15px 40px;
-      font-size: 18px;
-      border: none;
-      background-color: #00cc66;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-    }
+button {
+    margin-top: 20px;
+    padding: 10px 25px;
+    background-color: black;
+    color: red;
+    border: 1px solid red;
+    cursor: pointer;
+    font-family: 'Nosifer', cursive;
+    transition: 0.3s;
+}
 
-    .button:hover {
-      background-color: #00994d;
-    }
-  </style>
+button:hover {
+    background-color: red;
+    color: black;
+}
+
+.section {
+    display: none;
+}
+
+.active {
+    display: block;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="overlay">
 
-    <h2 class="outline-text">The Upside Down doesn’t welcome guests.</h2>
+<div id="screen1" class="section active">
+    <h1 class="outline-text">“The Upside Down doesn’t welcome guests.”</h1>
     <h2 class="outline-text">“It keeps them.”</h2>
 
-    <h3 class="outline-text">Rules of Escape Room</h3>
+    <input type="text" id="teamname" placeholder="Enter Your Team Name" required>
+    <br>
+    <button onclick="saveAndNext()">Next</button>
+</div>
 
+<div id="screen2" class="section">
+    <h2 class="outline-text">Rules of Escape Room</h2>
     <p class="outline-text">No phones.</p>
     <p class="outline-text">Solve within time.</p>
     <p class="outline-text">What you see… sees you back.</p>
+    <button onclick="nextScreen(3)">Next</button>
+</div>
 
+<div id="screen3" class="section">
     <h2 class="outline-text">“…Are you sure you want to be trapped where the walls breathe?”</h2>
+    <button onclick="nextScreen(4)">Continue</button>
+</div>
 
+<div id="screen4" class="section">
     <h1 class="outline-text">ACCESS GRANTED</h1>
+</div>
 
-    <button class="button">Enter</button>
+</div>
 
-  </div>
+<!-- Background Music -->
+<audio id="bgmusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+const music = document.getElementById("bgmusic");
+
+function startMusic() {
+    music.volume = 0.5;
+    music.play().catch(() => {
+        console.log("Autoplay blocked until interaction.");
+    });
+}
+
+window.addEventListener("load", startMusic);
+document.addEventListener("click", startMusic, { once: true });
+
+function nextScreen(screenNumber) {
+    document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
+    document.getElementById("screen" + screenNumber).classList.add("active");
+}
+
+function saveAndNext() {
+    var team = document.getElementById("teamname").value;
+
+    if (team.trim() === "") {
+        alert("Enter Team Name First");
+        return;
+    }
+
+    nextScreen(2);
+
+    fetch("https://script.google.com/macros/s/AKfycbylPBcvGLYyPCkhuizypxXefOmrANjgMjBS2P8KjGDI0coLZRQLP3TN88I9Dhu2bnmG/exec", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            teamname: team
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        console.log("Saved:", data);
+    })
+    .catch(error => {
+        console.error("Background save failed:", error);
+    });
+}
+</script>
 
 </body>
 </html>
