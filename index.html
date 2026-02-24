@@ -12,7 +12,6 @@ body {
     padding: 0;
     font-family: 'Nosifer', cursive;
 
-    background-color: #000;
     background-image: url("background.jpeg");
     background-size: cover;
     background-position: center;
@@ -24,8 +23,8 @@ body {
     overflow: hidden;
 }
 
+/* No dark overlay now */
 .overlay {
-    background: rgba(0, 0, 0, 0.85);
     height: 100vh;
     display: flex;
     flex-direction: column;
@@ -142,10 +141,8 @@ function saveAndNext() {
         return;
     }
 
-    // Instant transition (no delay)
     nextScreen(2);
 
-    // Background save (non-blocking)
     fetch("https://script.google.com/macros/s/AKfycbylPBcvGLYyPCkhuizypxXefOmrANjgMjBS2P8KjGDI0coLZRQLP3TN88I9Dhu2bnmG/exec", {
         method: "POST",
         headers: {
