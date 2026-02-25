@@ -32,7 +32,6 @@ h1, h2, p, input, button {
     text-shadow:
         -1px -1px 0 black,
         1px -1px 0 black,
-        1px -1px 0 black,
         -1px 1px 0 black,
         1px 1px 0 black;
 }
@@ -153,7 +152,6 @@ function saveAndNext(){
 
     fetch("https://script.google.com/macros/s/AKfycbxID4zQFa2VfgtxSV534HadQdj4Lbg6FU2a2O-JUskLmUlcVJNJJEFlb3aE8ypDqyf1/exec",{
         method:"POST",
-        mode:"no-cors",
         headers:{
             "Content-Type":"application/json"
         },
@@ -161,11 +159,12 @@ function saveAndNext(){
             teamname: team
         })
     })
-    .then(()=>{
-        console.log("Saved");
+    .then(response => response.json())
+    .then(data => {
+        console.log("Server Response:", data);
     })
     .catch(err=>{
-        console.error(err);
+        console.error("Error:", err);
     });
 }
 
@@ -173,4 +172,3 @@ function saveAndNext(){
 
 </body>
 </html>
-
